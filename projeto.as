@@ -1,20 +1,62 @@
 len             EQU     80
 max_alt         EQU     4
 STACKBASE       EQU     4000h
+; timer
+TIMER_CONTROL   EQU     FFF7h
+TIMER_COUNTER   EQU     FFF6h
+TIMER_SETSTART  EQU     1
+TIMER_SETSTOP   EQU     0
+TIMER_SPEED     EQU     3
+; interruptions
+INT_MASK        EQU     FFFAh
+INT_MASK_VAL    EQU     8000h ; 1000 0000 0000 0000 b
 
                 ORIG    0000h
 vector          TAB     len
 seed            WORD    5
+TIMER_TICK      WORD    0
 
-                MVI     R6, STACKBASE
+MAIN:           MVI     R6, STACKBASE
+                
+                ; CONFIGURE TIMER ROUNTINES
+                ; interrupt mask
+                MVI     R1,INT_MASK
+                MVI     R2,INT_MASK_VAL
+                STOR    M[R1],R2
+                ; enable interruptions
+                ENI
+
+                ; START TIMER
+                MVI     R2,TIMER_SPEED
+                MVI     R1,TIMER_COUNTER
+                STOR    M[R1],R2          ; set timer to count 10x100ms
+                MVI     R1,TIMER_TICK
+                STOR    M[R1],R0          ; clear all timer ticks
+                MVI     R1,TIMER_CONTROL
+                MVI     R2,TIMER_SETSTART
+                STOR    M[R1],R2          ; start timer
+                
+                MVI     R5,TIMER_TICK
+.LOOP:          LOAD    R1,M[R5]
+                CMP     R1,R0
+                JAL.NZ  atualizajogo
+                ENI
+                BR      .LOOP
+                
+atualizajogo:   DSI
+                MVI     R2,TIMER_TICK     
+                LOAD    R1,M[R2]
+                DEC     R1
+                STOR    M[R2],R1
+                ENI
                 MVI     R1, vector
                 MVI     R2, len
-                JAL     atualizajogo 
-                
-atualizajogo:   DEC 	R6
+                DEC 	R6
 				STOR 	M[R6], R4	;PUSH R4
 				DEC		R6
-				STOR    M[R6], R5	;PUSH R5	
+				STOR    M[R6], R5	;PUSH R5
+                DEC		R6
+				STOR    M[R6], R7	;PUSH R7
                 MOV     R5, R2		;move number of required shifts to R5 
                 DEC     R5			
 .loop:          INC     R1			;.loop - shift all values in vector to the 
@@ -31,11 +73,13 @@ atualizajogo:   DEC 	R6
                 DEC     R1			;find end of vector
                 STOR    M[R1], R3	;add new terrain to end of vector
                 MVI     R1, vector	;reset R1 for loop
+                LOAD 	R7, M[R6]	 
+                INC     R6          ;POP R7
                 LOAD 	R5, M[R6]   
                 INC 	R6          ;POP R5    
 				LOAD 	R4, M[R6]	 
                 INC     R6          ;POP R4
-                BR      atualizajogo
+                JMP     R7
                 
                 
 geracacto:      DEC 	R6			
@@ -64,11 +108,47 @@ geracacto:      DEC 	R6
                 DEC     R5
                 AND     R3, R4, R5
                 INC     R3          
-				BR .return
+                BR      .return
                 
 .zero:          MOV     R3, R0		;return 0       
-.return:		LOAD 	R5, M[R6]	
+.return:        LOAD 	R5, M[R6]	
                 INC 	R6          ;POP R5     
                 LOAD 	R4, M[R6]      
                 INC     R6          ;POP R4
                 JMP     R7
+                
+AUX_TIMER_ISR:  ; SAVE CONTEXT
+                DEC     R6
+                STOR    M[R6],R1
+                DEC     R6
+                STOR    M[R6],R2
+                ; RESTART TIMER
+                MVI     R2,TIMER_SPEED
+                MVI     R1,TIMER_COUNTER
+                STOR    M[R1],R2          ; set timer to count value
+                MVI     R1,TIMER_CONTROL
+                MVI     R2,TIMER_SETSTART
+                STOR    M[R1],R2          ; start timer
+                ; INC TIMER FLAG
+                MVI     R2,TIMER_TICK
+                LOAD    R1,M[R2]
+                INC     R1
+                STOR    M[R2],R1
+                ; RESTORE CONTEXT
+                LOAD    R2,M[R6]
+                INC     R6
+                LOAD    R1,M[R6]
+                INC     R6
+                JMP     R7                
+                
+                
+                ORIG    7FF0h
+TIMER_ISR:      ; SAVE CONTEXT
+                DEC     R6
+                STOR    M[R6],R7
+                ; CALL AUXILIARY FUNCTION
+                JAL     AUX_TIMER_ISR
+                ; RESTORE CONTEXT
+                LOAD    R7,M[R6]
+                INC     R6
+                RTI
