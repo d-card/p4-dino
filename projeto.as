@@ -13,13 +13,12 @@ INT_MASK_VAL    EQU     8009h ; 1000 0000 0000 1001 b
 ; terminal
 TERM_WRITE      EQU     FFFEh
 TERM_CURSOR     EQU     FFFCh
-TERM_COLOR      EQU     FFFBh
                 ORIG    0000h
 VECTOR          TAB     LEN
 SEED            WORD    5
 TIMER_TICK      WORD    0
 START           WORD    0
-DINO_HEIGHT     WORD    0
+DINO_HEIGHT     WORD    1
 TerminalStr     STR     0,1,1d00h,'▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓',0,0
                 
                 
@@ -131,8 +130,7 @@ GERACACTO:      DEC 	R6
                 JMP     R7
 
 
-PRINT_GAME: 
-                DEC     R6
+PRINT_GAME:     DEC     R6
                 STOR    M[R6], R1
                 DEC     R6
                 STOR    M[R6], R2
@@ -140,7 +138,6 @@ PRINT_GAME:
                 STOR    M[R6], R3
                 MVI     R1, TERM_WRITE
                 MVI     R2, TERM_CURSOR
-                MVI     R3, TERM_COLOR
                 MVI     R4, TerminalStr
 
 TerminalLoop:   LOAD    R5, M[R4]
@@ -155,7 +152,6 @@ TerminalLoop:   LOAD    R5, M[R4]
                 DEC     R5
                 BR.Z    .Position
                 DEC     R5
-                BR.Z    .Color
                 BR      .End
 
 .Position:      LOAD    R5, M[R4]
@@ -163,12 +159,71 @@ TerminalLoop:   LOAD    R5, M[R4]
                 STOR    M[R2], R5
                 BR      TerminalLoop
 
-.Color:         LOAD    R5, M[R4]
-                INC     R4
-                STOR    M[R3], R5
-                BR      TerminalLoop
 
-.End:           LOAD    R3, M[R6]
+.End:           MVI     R5, DINO_HEIGHT
+                LOAD    R5, M[R5]
+                CMP     R5, R0
+                BR.NZ   .salto
+                MVI     R5, 1C04h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .skip
+.salto:         MVI     R3, 1
+                CMP     R5, R3
+                BR.Z    .alt1
+                MVI     R3, 2
+                CMP     R5, R3
+                BR.Z    .alt2
+                MVI     R3, 3
+                CMP     R5, R3
+                BR.Z    .alt3
+                MVI     R3, 4
+                CMP     R5, R3
+                BR.Z    .alt4
+                MVI     R3, 5
+                CMP     R5, R3
+                BR.Z    .alt5
+.alt1:          MVI     R5, 1B04h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .skip
+.alt2:          MVI     R5, 1A04h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .skip
+.alt3:          MVI     R5, 1904h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .skip
+.alt4:          MVI     R5, 1804h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .skip
+.alt5:          MVI     R5, 1704h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+.skip:          MVI     R3, 100h
+                SUB     R5, R5, R3
+                STOR    M[R2], R5
+                MVI     R3, '╞'
+                STOR    M[R1], R3
+                MVI     R3, 100h
+                SUB     R5, R5, R3
+                STOR    M[R2], R5
+                MVI     R5, '○'
+                STOR    M[R1], R5
+         
+
+
+
+
+                LOAD    R3, M[R6]
                 INC     R6
                 LOAD    R2, M[R6]
                 INC     R6
