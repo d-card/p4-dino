@@ -19,6 +19,7 @@ SEED            WORD    5
 TIMER_TICK      WORD    0
 START           WORD    0
 DINO_HEIGHT     WORD    0
+JUMPING         WORD    1
 TerminalStr     STR     0,1,1d00h,'▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓',0,0
                 
                 
@@ -73,16 +74,25 @@ TerminalLoop:   LOAD    R5, M[R4]
                 MVI     R5,TIMER_TICK
 .LOOP:          LOAD    R1,M[R5]
                 CMP     R1,R0
-                DSI
-                JAL.NZ  ATUALIZAJOGO
+                BR.NZ   .UPDATE
+                BR      .LOOP
+.UPDATE:        DSI
+                MVI     R2, TIMER_TICK     
+                MVI   R1, 0
+                STOR    M[R2], R1
+                JAL     ATUALIZAJOGO
+                ;JAL     PRINT_CACTOS
+                ;MVI     R2, JUMPING
+                ;LOAD    R2, M[R2]
+                ;CMP     R2, R0
+                ;BR.NZ   .SALTO
+                JAL     PRINT_DINO
                 ENI
                 BR      .LOOP
+;.SALTO:         
                 
-ATUALIZAJOGO:   MVI     R2, TIMER_TICK     
-                LOAD    R1, M[R2]
-                DEC     R1
-                STOR    M[R2], R1
-                MVI     R1, VECTOR
+                
+ATUALIZAJOGO:   MVI     R1, VECTOR
                 MVI     R2, LEN
                 DEC 	R6
 				STOR 	M[R6], R4	;PUSH R4
@@ -106,7 +116,6 @@ ATUALIZAJOGO:   MVI     R2, TIMER_TICK
                 DEC     R1			;find end of vector
                 STOR    M[R1], R3	;add new terrain to end of vector
                 MVI     R1, VECTOR	;reset R1 for loop
-                JAL     PRINT_GAME
                 LOAD 	R7, M[R6]	 
                 INC     R6          ;POP R7
                 LOAD 	R5, M[R6]   
@@ -151,12 +160,10 @@ GERACACTO:      DEC 	R6
                 JMP     R7
 
 
-PRINT_GAME:     DEC     R6
-                STOR    M[R6], R1
+PRINT_DINO:     DEC     R6
+                STOR    M[R6], R5
                 DEC     R6
-                STOR    M[R6], R2
-                DEC     R6
-                STOR    M[R6], R3
+                STOR    M[R6], R4
                 MVI     R1, TERM_WRITE
                 MVI     R2, TERM_CURSOR
                 MVI     R4, TerminalStr
@@ -218,16 +225,9 @@ PRINT_GAME:     DEC     R6
                 STOR    M[R2], R5
                 MVI     R5, '○'
                 STOR    M[R1], R5
-         
-
-
-
-
-                LOAD    R3, M[R6]
+                LOAD    R4, M[R6]
                 INC     R6
-                LOAD    R2, M[R6]
-                INC     R6
-                LOAD    R1, M[R6]
+                LOAD    R5, M[R6]
                 INC     R6
                 JMP R7
                 
@@ -287,12 +287,12 @@ KEYUP:          ; SAVE CONTEXT
                 DEC     R6
                 STOR    M[R6],R1
                 DEC     R6
-                STOR    M[R6],R7
-                ; CALL AUXILIARY FUNCTION
+                STOR    M[R6],R2
                 MVI     R1,1
-                JAL     AUX_KEYUPDOWN
+                MVI     R2, JUMPING
+                STOR    M[R2], R1
                 ; RESTORE CONTEXT
-                LOAD    R7,M[R6]
+                LOAD    R2,M[R6]
                 INC     R6
                 LOAD    R1,M[R6]
                 INC     R6
