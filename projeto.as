@@ -54,6 +54,7 @@ MAIN:           MVI     R6, STACKBASE
                 CMP     R1,R0
                 DSI
                 JAL.NZ  ATUALIZAJOGO
+                JAL     PRINT_GAME
                 ENI
                 BR      .LOOP
                 
@@ -85,7 +86,6 @@ ATUALIZAJOGO:   MVI     R2, TIMER_TICK
                 DEC     R1			;find end of vector
                 STOR    M[R1], R3	;add new terrain to end of vector
                 MVI     R1, VECTOR	;reset R1 for loop
-                JAL     PRINT_GAME
                 LOAD 	R7, M[R6]	 
                 INC     R6          ;POP R7
                 LOAD 	R5, M[R6]   
