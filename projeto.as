@@ -18,7 +18,7 @@ VECTOR          TAB     LEN
 SEED            WORD    5
 TIMER_TICK      WORD    0
 START           WORD    0
-DINO_HEIGHT     WORD    1
+DINO_HEIGHT     WORD    0
 TerminalStr     STR     0,1,1d00h,'▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓',0,0
                 
                 
@@ -33,7 +33,28 @@ MAIN:           MVI     R6, STACKBASE
                 ; enable interruptions
                 ENI
 
-                JAL PRINT_GAME
+                MVI     R1, TERM_WRITE
+                MVI     R2, TERM_CURSOR
+                MVI     R4, TerminalStr
+
+TerminalLoop:   LOAD    R5, M[R4]
+                INC     R4
+                CMP     R5, R0
+                BR.Z    .Control
+                STOR    M[R1], R5
+                BR      TerminalLoop
+
+.Control:       LOAD    R5, M[R4]
+                INC     R4
+                DEC     R5
+                BR.Z    .Position
+                DEC     R5
+                BR      .CHECKSTART
+
+.Position:      LOAD    R5, M[R4]
+                INC     R4
+                STOR    M[R2], R5
+                BR      TerminalLoop
 .CHECKSTART:    MVI R1, START
                 LOAD R1, M[R1]
                 CMP R1, R0
@@ -54,7 +75,6 @@ MAIN:           MVI     R6, STACKBASE
                 CMP     R1,R0
                 DSI
                 JAL.NZ  ATUALIZAJOGO
-                JAL     PRINT_GAME
                 ENI
                 BR      .LOOP
                 
@@ -86,6 +106,7 @@ ATUALIZAJOGO:   MVI     R2, TIMER_TICK
                 DEC     R1			;find end of vector
                 STOR    M[R1], R3	;add new terrain to end of vector
                 MVI     R1, VECTOR	;reset R1 for loop
+                JAL     PRINT_GAME
                 LOAD 	R7, M[R6]	 
                 INC     R6          ;POP R7
                 LOAD 	R5, M[R6]   
@@ -139,28 +160,7 @@ PRINT_GAME:     DEC     R6
                 MVI     R1, TERM_WRITE
                 MVI     R2, TERM_CURSOR
                 MVI     R4, TerminalStr
-
-TerminalLoop:   LOAD    R5, M[R4]
-                INC     R4
-                CMP     R5, R0
-                BR.Z    .Control
-                STOR    M[R1], R5
-                BR      TerminalLoop
-
-.Control:       LOAD    R5, M[R4]
-                INC     R4
-                DEC     R5
-                BR.Z    .Position
-                DEC     R5
-                BR      .End
-
-.Position:      LOAD    R5, M[R4]
-                INC     R4
-                STOR    M[R2], R5
-                BR      TerminalLoop
-
-
-.End:           MVI     R5, DINO_HEIGHT
+                MVI     R5, DINO_HEIGHT
                 LOAD    R5, M[R5]
                 CMP     R5, R0
                 BR.NZ   .salto
