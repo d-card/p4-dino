@@ -81,7 +81,7 @@ TerminalLoop:   LOAD    R5, M[R4]
                 MVI     R1, 0
                 STOR    M[R2], R1
                 JAL     ATUALIZAJOGO
-                ;JAL     PRINT_CACTOS
+                JAL     ATUALIZACATOS
                 JAL     PRINT_DINO
                 MVI     R2, JUMPING
                 LOAD    R2, M[R2]
@@ -190,6 +190,75 @@ GERACACTO:      DEC 	R6
                 INC     R6          ;POP R4
                 JMP     R7
 
+ATUALIZACATOS:  DEC     R6
+                STOR    M[R6], R1
+                DEC     R6
+                STOR    M[R6], R2
+                DEC     R6
+                STOR    M[R6], R3
+                DEC     R6
+                STOR    M[R6], R4
+                DEC     R6
+                STOR    M[R6], R5
+
+
+                MVI     R1, TERM_CURSOR
+                MVI     R4, 1900h
+                STOR    M[R1], R4
+
+                MVI     R1, VECTOR
+                MVI     R4, TERM_WRITE
+
+
+                MVI     R4, 5
+
+BIGLOOP:        DEC     R4
+                CMP     R4, R0
+                BR.Z    RETURN2
+                MVI     R1, VECTOR
+                MVI     R3, LEN
+
+
+LOOP:           CMP     R3, R0
+                BR.Z    BIGLOOP
+                DEC     R3
+                LOAD    R2, M[R1]
+                INC     R1
+                DEC     R6
+                STOR    M[R6], R4
+                CMP     R4, R2
+                BR.Z    ESCREVER
+                BR.N    ESCREVER
+
+NADA:           MVI     R4, TERM_WRITE
+                MVI     R5, ' '
+                STOR    M[R4], R5
+                LOAD    R4, M[R6]
+                INC     R6
+                BR      LOOP
+
+ESCREVER:       MVI     R4, TERM_WRITE
+                MVI     R5, '╬'
+                STOR    M[R4], R5
+                LOAD    R4, M[R6]
+                INC     R6
+                BR      LOOP
+
+
+RETURN2:
+
+                LOAD    R5, M[R6]
+                INC     R6
+                LOAD    R4, M[R6]
+                INC     R6
+                LOAD    R3, M[R6]
+                INC     R6
+                LOAD    R2, M[R6]
+                INC     R6
+                LOAD    R1, M[R6]
+                INC     R6
+
+                JMP     R7
 
 PRINT_DINO:     DEC     R6
                 STOR    M[R6], R5
@@ -254,8 +323,13 @@ PRINT_DINO:     DEC     R6
                 MVI     R3, 100h
                 SUB     R5, R5, R3
                 STOR    M[R2], R5
-                MVI     R5, '○'
-                STOR    M[R1], R5
+                MVI     R3, '○'
+                STOR    M[R1], R3
+                MVI     R3, 100h
+                SUB     R5, R5, R3
+                STOR    M[R2], R5
+                MVI     R3, ' '
+                STOR    M[R1], R3
                 LOAD    R4, M[R6]
                 INC     R6
                 LOAD    R5, M[R6]
