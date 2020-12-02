@@ -92,6 +92,9 @@ TerminalLoop:   LOAD    R5, M[R4]
                 STOR    M[R1], R2
                 
                 ; START TIMER
+                DEC     R1
+                MVI     R2, START
+                STOR    M[R2], R1
                 MVI     R2,TIMER_SPEED
                 MVI     R1,TIMER_COUNTER
                 STOR    M[R1],R2          ; set timer to count 10x100ms
