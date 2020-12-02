@@ -14,11 +14,25 @@ INT_MASK_VAL    EQU     8009h ; 1000 0000 0000 1001 b
 ; terminal
 TERM_WRITE      EQU     FFFEh
 TERM_CURSOR     EQU     FFFCh
+; 7 segment display
+DISP7_D0        EQU     FFF0h
+DISP7_D1        EQU     FFF1h
+DISP7_D2        EQU     FFF2h
+DISP7_D3        EQU     FFF3h
+DISP7_D4        EQU     FFEEh
+DISP7_D5        EQU     FFEFh
                 ORIG    0000h
 VECTOR          TAB     LEN
 SEED            WORD    SEED_val
 TIMER_TICK      WORD    0
 START           WORD    0
+TIME0           WORD    0
+TIME1           WORD    0
+TIME2           WORD    0
+TIME3           WORD    0
+TIME4           WORD    0
+TIME5           WORD    0
+TIME6           WORD    0
 DINO_HEIGHT     WORD    0
 JUMPING         WORD    0
 TerminalStr     STR     0,1,600h,'                                                        Press 0 to start',0,1,800h,'                                                        Press ▲ to jump',0,1,d00h,'                                  Dino Game',0,1,1d00h,'▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓',0,0
@@ -117,6 +131,7 @@ TerminalLoop:   LOAD    R5, M[R4]
                 JAL     ATUALIZACATOS
                 JAL     PRINT_DINO
                 JAL     COLISION
+                JAL     UPDATE_DISP
                 MVI     R2, JUMPING
                 LOAD    R2, M[R2]
                 CMP     R2, R0
@@ -153,7 +168,133 @@ TerminalLoop:   LOAD    R5, M[R4]
                 STOR    M[R2], R1
                 JMP     R7
 
-
+UPDATE_DISP:    DEC     R6
+                STOR    M[R6], R7
+                
+                MVI     R1, TIME0
+                LOAD    R2, M[R1]
+                
+                ; SHOW TIME ON DISP7_D0
+                MVI     R1,9
+                CMP     R2,R1
+                JAL.P   REGULAR0
+                MVI     R1, TIME0
+                LOAD    R2, M[R1]
+                MVI     R1,DISP7_D0
+                STOR    M[R1],R2
+                ; SHOW TIME ON DISP7_D1
+                MVI     R1, TIME1
+                LOAD    R2, M[R1]
+                MVI     R1,9
+                CMP     R2,R1
+                JAL.P   REGULAR1
+                MVI     R1, TIME1
+                LOAD    R2, M[R1]
+                MVI     R1,DISP7_D1
+                STOR    M[R1],R2
+                ; SHOW TIME ON DISP7_D2
+                MVI     R1, TIME2
+                LOAD    R2, M[R1]
+                MVI     R1,9
+                CMP     R2,R1
+                JAL.P   REGULAR2
+                MVI     R1, TIME2
+                LOAD    R2, M[R1]
+                MVI     R1,DISP7_D2
+                STOR    M[R1],R2
+                ; SHOW TIME ON DISP7_D3
+                MVI     R1, TIME3
+                LOAD    R2, M[R1]
+                MVI     R1,9
+                CMP     R2,R1
+                JAL.P   REGULAR3
+                MVI     R1, TIME3
+                LOAD    R2, M[R1]
+                MVI     R1,DISP7_D3
+                STOR    M[R1],R2
+                ; SHOW TIME ON DISP7_D4
+                MVI     R1, TIME4
+                LOAD    R2, M[R1]
+                MVI     R1,9
+                CMP     R2,R1
+                JAL.P   REGULAR4
+                MVI     R1, TIME4
+                LOAD    R2, M[R1]
+                MVI     R1,DISP7_D4
+                STOR    M[R1],R2
+                ; SHOW TIME ON DISP7_D5
+                MVI     R1, TIME5
+                LOAD    R2, M[R1]
+                MVI     R1,9
+                CMP     R2,R1
+                JAL.P   REGULAR5
+                MVI     R1, TIME5
+                LOAD    R2, M[R1]
+                MVI     R1,DISP7_D5
+                STOR    M[R1],R2
+                
+                MVI     R1, TIME0
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                
+                LOAD    R7, M[R6]
+                INC     R6
+                JMP     R7
+                
+REGULAR0:       MVI     R1, TIME0
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME1
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                JMP     R7
+                
+REGULAR1:       MVI     R1, TIME1
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME2
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                JMP     R7
+                
+REGULAR2:       MVI     R1, TIME2
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME3
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                JMP     R7
+                
+REGULAR3:       MVI     R1, TIME2
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME3
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                JMP     R7
+                
+REGULAR4:       MVI     R1, TIME3
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME4
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                JMP     R7
+                
+REGULAR5:       MVI     R1, TIME4
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME5
+                LOAD    R2, M[R1]
+                INC     R2
+                STOR    M[R1], R2
+                JMP     R7
 
 
                 
@@ -400,6 +541,20 @@ COLISION:       MVI     R1, VECTOR
                 MVI     R2, 'E'
                 STOR    M[R1], R2
                 MVI     R2, 'R'
+                STOR    M[R1], R2
+                ;RESET SCORE
+                MVI     R1, TIME0
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME1
+                STOR    M[R1], R2
+                MVI     R1, TIME2
+                STOR    M[R1], R2
+                MVI     R1, TIME3
+                STOR    M[R1], R2
+                MVI     R1, TIME4
+                STOR    M[R1], R2
+                MVI     R1, TIME5
                 STOR    M[R1], R2
                 ;RESET START VARIABLE
                 MVI     R1, START
