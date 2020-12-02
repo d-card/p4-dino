@@ -1,6 +1,7 @@
 LEN             EQU     80
 MAX_ALT         EQU     4
 STACKBASE       EQU     4000h
+SEED_val        EQU     5   
 ; timer
 TIMER_CONTROL   EQU     FFF7h
 TIMER_COUNTER   EQU     FFF6h
@@ -15,16 +16,16 @@ TERM_WRITE      EQU     FFFEh
 TERM_CURSOR     EQU     FFFCh
                 ORIG    0000h
 VECTOR          TAB     LEN
-SEED            WORD    5
+SEED            WORD    SEED_val
 TIMER_TICK      WORD    0
 START           WORD    0
 DINO_HEIGHT     WORD    0
 JUMPING         WORD    0
 TerminalStr     STR     0,1,600h,'                                                        Press 0 to start',0,1,800h,'                                                        Press ▲ to jump',0,1,d00h,'                                  Dino Game',0,1,1d00h,'▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓',0,0
-                
+                      
                 
 
-MAIN:           MVI     R6, STACKBASE
+ MAIN:          MVI     R6, STACKBASE
                 
                 ; CONFIGURE TIMER ROUNTINES
                 ; interrupt mask
@@ -59,8 +60,37 @@ TerminalLoop:   LOAD    R5, M[R4]
 .CHECKSTART:    MVI     R1, START
                 LOAD    R1, M[R1]
                 CMP     R1, R0
-                BR.Z .CHECKSTART
-
+                BR.Z    .CHECKSTART
+                ;CLEAR GAME OVER
+                MVI     R1, TERM_CURSOR
+                MVI     R2, 1322h
+                STOR    M[R1], R2
+                MVI     R1, TERM_WRITE
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                ;RESET DINO_HEIGHT AND JUMPING
+                MVI     R1, DINO_HEIGHT
+                MVI     R2, 0 
+                STOR    M[R1], R2
+                MVI     R1, JUMPING
+                STOR    M[R1], R2
+                
                 ; START TIMER
                 MVI     R2,TIMER_SPEED
                 MVI     R1,TIMER_COUNTER
@@ -83,6 +113,7 @@ TerminalLoop:   LOAD    R5, M[R4]
                 JAL     ATUALIZAJOGO
                 JAL     ATUALIZACATOS
                 JAL     PRINT_DINO
+                JAL     COLISION
                 MVI     R2, JUMPING
                 LOAD    R2, M[R2]
                 CMP     R2, R0
@@ -212,42 +243,40 @@ ATUALIZACATOS:  DEC     R6
 
                 MVI     R4, 5
 
-BIGLOOP:        DEC     R4
+.BIGLOOP:       DEC     R4
                 CMP     R4, R0
-                BR.Z    RETURN2
+                BR.Z    .RETURN2
                 MVI     R1, VECTOR
                 MVI     R3, LEN
 
 
-LOOP:           CMP     R3, R0
-                BR.Z    BIGLOOP
+.LOOP:          CMP     R3, R0
+                BR.Z    .BIGLOOP
                 DEC     R3
                 LOAD    R2, M[R1]
                 INC     R1
                 DEC     R6
                 STOR    M[R6], R4
                 CMP     R4, R2
-                BR.Z    ESCREVER
-                BR.N    ESCREVER
+                BR.Z    .ESCREVER
+                BR.N    .ESCREVER
 
-NADA:           MVI     R4, TERM_WRITE
+.NADA:          MVI     R4, TERM_WRITE
                 MVI     R5, ' '
                 STOR    M[R4], R5
                 LOAD    R4, M[R6]
                 INC     R6
-                BR      LOOP
+                BR      .LOOP
 
-ESCREVER:       MVI     R4, TERM_WRITE
+.ESCREVER:      MVI     R4, TERM_WRITE
                 MVI     R5, '╬'
                 STOR    M[R4], R5
                 LOAD    R4, M[R6]
                 INC     R6
-                BR      LOOP
+                BR      .LOOP
 
 
-RETURN2:
-
-                LOAD    R5, M[R6]
+.RETURN2:       LOAD    R5, M[R6]
                 INC     R6
                 LOAD    R4, M[R6]
                 INC     R6
@@ -257,7 +286,6 @@ RETURN2:
                 INC     R6
                 LOAD    R1, M[R6]
                 INC     R6
-
                 JMP     R7
 
 PRINT_DINO:     DEC     R6
@@ -266,7 +294,6 @@ PRINT_DINO:     DEC     R6
                 STOR    M[R6], R4
                 MVI     R1, TERM_WRITE
                 MVI     R2, TERM_CURSOR
-                MVI     R4, TerminalStr
                 MVI     R5, DINO_HEIGHT
                 LOAD    R5, M[R5]
                 CMP     R5, R0
@@ -335,8 +362,67 @@ PRINT_DINO:     DEC     R6
                 LOAD    R5, M[R6]
                 INC     R6
                 JMP R7
+                
+COLISION:       MVI     R1, VECTOR
+                MVI     R2, 4
+                ADD     R1, R1, R2
+                LOAD    R2, M[R1]
+                DEC     R2
+                MVI     R1, DINO_HEIGHT
+                LOAD    R1, M[R1]
+                CMP     R1, R2
+                BR.NP   .GAME_OVER
+                JMP     R7
 
-
+.GAME_OVER:     MVI     R1, TERM_CURSOR
+                MVI     R2, FFFFh
+                STOR    M[R1], R2
+                MVI     R2, 1322h
+                STOR    M[R1], R2
+                MVI     R1, TERM_WRITE
+                MVI     R2, 'G'
+                STOR    M[R1], R2
+                MVI     R2, 'A'
+                STOR    M[R1], R2
+                MVI     R2, 'M'
+                STOR    M[R1], R2
+                MVI     R2, 'E'
+                STOR    M[R1], R2
+                MVI     R2, ' '
+                STOR    M[R1], R2
+                MVI     R2, 'O'
+                STOR    M[R1], R2
+                MVI     R2, 'V'
+                STOR    M[R1], R2
+                MVI     R2, 'E'
+                STOR    M[R1], R2
+                MVI     R2, 'R'
+                STOR    M[R1], R2
+                ;RESET START VARIABLE
+                MVI     R1, START
+                MVI     R2, 0
+                STOR    M[R1], R2
+                ;STOP TIMER
+                MVI     R1,TIMER_TICK
+                STOR    M[R1],R0          ; clear all timer ticks
+                MVI     R1,TIMER_CONTROL
+                MVI     R2,TIMER_SETSTOP
+                STOR    M[R1],R2
+                ;RESET SEED
+                MVI     R1, SEED
+                MVI     R2, SEED_val
+                STOR    M[R1], R2
+                ;RESET VECTOR
+                MVI     R1, VECTOR
+                MOV     R2, R0
+                MVI     R3, 80
+.LOOP:          STOR    M[R1], R2
+                INC     R1
+                DEC     R3
+                CMP     R3, R0
+                BR.NZ   .LOOP 
+                JMP     MAIN
+                
 
 AUX_TIMER_ISR:  ; SAVE CONTEXT
                 DEC     R6
@@ -361,7 +447,14 @@ AUX_TIMER_ISR:  ; SAVE CONTEXT
                 LOAD    R1,M[R6]
                 INC     R6
                 JMP     R7                
-                
+
+KEYUP_AUX:      MVI     R2, JUMPING
+                LOAD    R1, M[R2]
+                CMP     R1, R0
+                BR.NZ   .SKIP
+                MVI     R1,1
+                STOR    M[R2], R1
+.SKIP:          JMP     R7
                 
                 ORIG    7FF0h
 TIMER_ISR:      ; SAVE CONTEXT
@@ -376,6 +469,7 @@ TIMER_ISR:      ; SAVE CONTEXT
 
                 ORIG    7F00h
 KEYZERO:        ; SAVE CONTEXT
+                DSI
                 DEC     R6
                 STOR    M[R6],R1
                 DEC     R6
@@ -387,20 +481,25 @@ KEYZERO:        ; SAVE CONTEXT
                 INC     R6
                 LOAD    R1,M[R6]
                 INC     R6
+                ENI
                 RTI
 
                 ORIG    7F30h
 KEYUP:          ; SAVE CONTEXT
+                DSI
                 DEC     R6
                 STOR    M[R6],R1
                 DEC     R6
                 STOR    M[R6],R2
-                MVI     R1,1
-                MVI     R2, JUMPING
-                STOR    M[R2], R1
+                DEC     R6
+                STOR    M[R6],R7
+                JAL     KEYUP_AUX
                 ; RESTORE CONTEXT
+                LOAD    R7,M[R6]
+                INC     R6
                 LOAD    R2,M[R6]
                 INC     R6
                 LOAD    R1,M[R6]
                 INC     R6
+                ENI
                 RTI
