@@ -116,7 +116,7 @@ MAIN:           MVI     R6, STACK_P                 ; set stack pointer
                 JAL.NZ  JUMP
                 JAL     UPDATE_DISP
                 ENI
-                BR      .Loop
+                BR      .Loop2
 
 TERRAIN_SETUP:  ; Save context
                 DEC     R6
@@ -496,17 +496,17 @@ PRINT_DINO:     ; Save context
                 MVI     R3, '┴'
                 STOR    M[R1], R3
                 BR      .Skip
-.Height3:          MVI     R5, 1904h
+.Height3:       MVI     R5, 1904h
                 STOR    M[R2], R5
                 MVI     R3, '┴'
                 STOR    M[R1], R3
                 BR      .Skip
-.Height4:          MVI     R5, 1804h
+.Height4:       MVI     R5, 1804h
                 STOR    M[R2], R5
                 MVI     R3, '┴'
                 STOR    M[R1], R3
                 BR      .Skip
-.Height5:          MVI     R5, 1704h
+.Height5:       MVI     R5, 1704h
                 STOR    M[R2], R5
                 MVI     R3, '┴'
                 STOR    M[R1], R3
