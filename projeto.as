@@ -97,10 +97,10 @@ MAIN:           MVI     R6, STACK_P                 ; set stack pointer
                 
                 ; Wait for timer interrutps
                 MVI     R5,TIMER_TICK
-.Loop:          LOAD    R1,M[R5]
+.Loop2:         LOAD    R1,M[R5]
                 CMP     R1,R0
                 BR.NZ   .Update
-                BR      .Loop
+                BR      .Loop2
 
 .Update:        DSI
                 MVI     R2, TIMER_TICK     
@@ -585,11 +585,11 @@ COLISION:       MVI     R1, VECTOR
                 MVI     R1, VECTOR
                 MOV     R2, R0
                 MVI     R3, 80
-.Loop:          STOR    M[R1], R2
+.Loop2:         STOR    M[R1], R2
                 INC     R1
                 DEC     R3
                 CMP     R3, R0
-                BR.NZ   .Loop 
+                BR.NZ   .Loop2 
                 JMP     MAIN
                 
 ;-------------- Interrupts -----------------------------------------------------
