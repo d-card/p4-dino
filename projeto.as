@@ -57,7 +57,7 @@ GAME_OVER_C     STR     0,'         ',0
 MAIN:           MVI     R6, STACK_P                 ; set stack pointer
                 MVI     R1,INT_MASK                     
                 MVI     R2,INT_MASK_VAL 
-                STOR    M[R1],R2                    ; set iunterrupt mask
+                STOR    M[R1],R2                    ; set interrupt mask
                 ENI                                 ; enable interrupts
 
                 JAL TERRAIN_SETUP
@@ -68,7 +68,7 @@ MAIN:           MVI     R6, STACK_P                 ; set stack pointer
                 CMP     R1, R0
                 BR.Z    .Checkstart
 
-                ;Clear 'Game over' text
+                ; Clear 'Game over' text
                 MVI     R1, TERM_CURSOR
                 MVI     R2, 1322h
                 MVI     R3, GAME_OVER_C
@@ -145,7 +145,6 @@ TERRAIN_SETUP:  ; Save context
                 INC     R6
                 JMP     R7
 
-                
 JUMP:           ; Check if dino is going up or down
                 MVI     R2, JUMPING
                 LOAD    R2, M[R2]
@@ -187,7 +186,7 @@ UPDATE_DISP:    DEC     R6
                 ; SHOW TIME ON DISP7_D0
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   REGULAR0
+                JAL.P   .REGULAR0
                 MVI     R1, TIME0
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D0
@@ -197,7 +196,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   REGULAR1
+                JAL.P   .REGULAR1
                 MVI     R1, TIME1
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D1
@@ -207,7 +206,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   REGULAR2
+                JAL.P   .REGULAR2
                 MVI     R1, TIME2
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D2
@@ -217,7 +216,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   REGULAR3
+                JAL.P   .REGULAR3
                 MVI     R1, TIME3
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D3
@@ -227,17 +226,12 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   REGULAR4
+                JAL.P   .REGULAR4
                 MVI     R1, TIME4
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D4
                 STOR    M[R1],R2
                 ; SHOW TIME ON DISP7_D5
-                MVI     R1, TIME5
-                LOAD    R2, M[R1]
-                MVI     R1,9
-                CMP     R2,R1
-                JAL.P   REGULAR5
                 MVI     R1, TIME5
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D5
@@ -252,7 +246,8 @@ UPDATE_DISP:    DEC     R6
                 INC     R6
                 JMP     R7
                 
-REGULAR0:       MVI     R1, TIME0
+.REGULAR0:      ; Make the first display show 0 and increment the second
+                MVI     R1, TIME0
                 MVI     R2, 0
                 STOR    M[R1], R2
                 MVI     R1, TIME1
@@ -261,7 +256,8 @@ REGULAR0:       MVI     R1, TIME0
                 STOR    M[R1], R2
                 JMP     R7
                 
-REGULAR1:       MVI     R1, TIME1
+.REGULAR1:      ; Make the second display show 0 and increment the third
+                MVI     R1, TIME1
                 MVI     R2, 0
                 STOR    M[R1], R2
                 MVI     R1, TIME2
@@ -270,7 +266,8 @@ REGULAR1:       MVI     R1, TIME1
                 STOR    M[R1], R2
                 JMP     R7
                 
-REGULAR2:       MVI     R1, TIME2
+.REGULAR2:      ; Make the third display show 0 and increment the fourth
+                MVI     R1, TIME2
                 MVI     R2, 0
                 STOR    M[R1], R2
                 MVI     R1, TIME3
@@ -279,16 +276,8 @@ REGULAR2:       MVI     R1, TIME2
                 STOR    M[R1], R2
                 JMP     R7
                 
-REGULAR3:       MVI     R1, TIME2
-                MVI     R2, 0
-                STOR    M[R1], R2
+.REGULAR3:      ; Make the fourth display show 0 and increment the fifth
                 MVI     R1, TIME3
-                LOAD    R2, M[R1]
-                INC     R2
-                STOR    M[R1], R2
-                JMP     R7
-                
-REGULAR4:       MVI     R1, TIME3
                 MVI     R2, 0
                 STOR    M[R1], R2
                 MVI     R1, TIME4
@@ -297,7 +286,8 @@ REGULAR4:       MVI     R1, TIME3
                 STOR    M[R1], R2
                 JMP     R7
                 
-REGULAR5:       MVI     R1, TIME4
+.REGULAR4:      ; Make the fifth display show 0 and increment the sixth
+                MVI     R1, TIME4
                 MVI     R2, 0
                 STOR    M[R1], R2
                 MVI     R1, TIME5
@@ -306,8 +296,6 @@ REGULAR5:       MVI     R1, TIME4
                 STOR    M[R1], R2
                 JMP     R7
 
-
-                
 UPDATE_GAME:    ; Save context
                 DEC 	R6
 				STOR 	M[R6], R4	
@@ -383,7 +371,8 @@ GEN_CACTUS:     ; Save context
                 INC     R6          
                 JMP     R7
 
-PRINT_CACTUS:   DEC     R6
+PRINT_CACTUS:   ; Save context
+                DEC     R6
                 STOR    M[R6], R1
                 DEC     R6
                 STOR    M[R6], R2
@@ -394,7 +383,7 @@ PRINT_CACTUS:   DEC     R6
                 DEC     R6
                 STOR    M[R6], R5
 
-
+                ; Place the cursor on the correct position
                 MVI     R1, TERM_CURSOR
                 MVI     R4, 1900h
                 STOR    M[R1], R4
@@ -405,13 +394,14 @@ PRINT_CACTUS:   DEC     R6
 
                 MVI     R4, 5
 
+                ; Loop over the 4 lines
 .BIGLOOP:       DEC     R4
                 CMP     R4, R0
                 BR.Z    .RETURN2
                 MVI     R1, VECTOR
                 MVI     R3, LEN
 
-
+                ; Loop over the 80 columns
 .LOOP:          CMP     R3, R0
                 BR.Z    .BIGLOOP
                 DEC     R3
@@ -419,26 +409,27 @@ PRINT_CACTUS:   DEC     R6
                 INC     R1
                 DEC     R6
                 STOR    M[R6], R4
+                ; Check cactus' height
                 CMP     R4, R2
                 BR.Z    .ESCREVER
                 BR.N    .ESCREVER
-
+                
+                ;Print nothing
 .NADA:          MVI     R4, TERM_WRITE
                 MVI     R5, ' '
                 STOR    M[R4], R5
                 LOAD    R4, M[R6]
                 INC     R6
                 BR      .LOOP
-
+                ; Print cactus
 .ESCREVER:      MVI     R4, TERM_WRITE
                 MVI     R5, '╬'
                 STOR    M[R4], R5
                 LOAD    R4, M[R6]
                 INC     R6
                 BR      .LOOP
-
-
-.RETURN2:       LOAD    R5, M[R6]
+.RETURN2:       ; Restore context
+                LOAD    R5, M[R6]
                 INC     R6
                 LOAD    R4, M[R6]
                 INC     R6
@@ -449,7 +440,7 @@ PRINT_CACTUS:   DEC     R6
                 LOAD    R1, M[R6]
                 INC     R6
                 JMP     R7
-
+                
 PRINT_DINO:     ; Save context
                 DEC     R6
                 STOR    M[R6], R5
@@ -539,10 +530,10 @@ COLISION:       MVI     R1, VECTOR
                 DEC     R2
                 MVI     R1, DINO_HEIGHT
                 LOAD    R1, M[R1]
+                ; Check if DINO_HEIGHT is bigger than the cactus value in its position
                 CMP     R1, R2
                 BR.NP   .Game_over
                 JMP     R7
-
 .Game_over:     ; Clear terminal
                 MVI     R1, TERM_CURSOR
                 MVI     R2, FFFFh
@@ -571,17 +562,17 @@ COLISION:       MVI     R1, VECTOR
                 STOR    M[R1], R2
                 MVI     R1, TIME5
                 STOR    M[R1], R2
-                ;Reset START variable
+                ; Reset START variable
                 MVI     R1, START
                 MVI     R2, 0
                 STOR    M[R1], R2
-                ;Stop timer and clear timer ticks
+                ; Stop timer and clear timer ticks
                 MVI     R1,TIMER_TICK
                 STOR    M[R1],R0          
                 MVI     R1,TIMER_CONTROL
                 MVI     R2,TIMER_SETSTOP
                 STOR    M[R1],R2
-                ;Reset VECTOR
+                ; Reset VECTOR
                 MVI     R1, VECTOR
                 MOV     R2, R0
                 MVI     R3, 80
@@ -616,8 +607,8 @@ AUX_TIMER:      ; Save context
                 INC     R6
                 LOAD    R1,M[R6]
                 INC     R6
-                JMP     R7                
-
+                JMP     R7 
+                
 AUX_KEYUP:      ; Save context
                 DEC     R6
                 STOR    M[R6],R1
@@ -636,7 +627,7 @@ AUX_KEYUP:      ; Save context
                 LOAD    R1,M[R6]
                 INC     R6
                 JMP     R7
-
+                
                 ; TIMER
                 ORIG    7FF0h
                 ; Save context
@@ -648,7 +639,7 @@ AUX_KEYUP:      ; Save context
                 LOAD    R7,M[R6]
                 INC     R6
                 RTI
-
+                
                 ; KEY ZERO 
                 ORIG    7F00h
                 ; Save context
@@ -666,7 +657,7 @@ AUX_KEYUP:      ; Save context
                 LOAD    R1,M[R6]
                 INC     R6
                 RTI
-
+                
                 ; KEY UP
                 ORIG    7F30h
                 ; Save context
