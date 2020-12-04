@@ -25,7 +25,7 @@ TIMER_SETSTART  EQU     1
 TIMER_SETSTOP   EQU     0
 TIMER_SPEED     EQU     3
 LEN             EQU     80
-MAX_ALT         EQU     4
+MAX_HEIGHT      EQU     4
 STACK_P         EQU     4000h
 SEED_VAL        EQU     5   
 INT_MASK        EQU     FFFAh
@@ -79,13 +79,6 @@ MAIN:           MVI     R6, STACK_P                 ; set stack pointer
                 STOR    M[R1], R2
                 CMP     R2, R0
                 BR.NZ   .Loop
-
-                ; Reset DINO_HEIGHT and JUMPING
-                MVI     R1, DINO_HEIGHT
-                MVI     R2, 0 
-                STOR    M[R1], R2
-                MVI     R1, JUMPING
-                STOR    M[R1], R2
                 
                 ; Start timer
                 MVI     R2,TIMER_SPEED
@@ -145,19 +138,259 @@ TERRAIN_SETUP:  ; Save context
                 INC     R6
                 JMP     R7
 
+UPDATE_GAME:    ; Save context
+                DEC 	R6
+				STOR 	M[R6], R4	
+				DEC		R6
+				STOR    M[R6], R5	
+                DEC		R6
+				STOR    M[R6], R7
+                ; Move parameters to registers
+                MVI     R1, VECTOR
+                MVI     R2, LEN	
+                MOV     R5, R2		 
+                DEC     R5			
+.Loop:          ; Shift all values in vector to the left one by one
+                INC     R1			 
+                LOAD    R4, M[R1]	
+                DEC     R1			
+                STOR    M[R1], R4	
+                INC     R1			
+                DEC     R5			
+                CMP     R5, R0		
+                BR.NZ   .Loop		
+                ; Generate cactus/empty space
+                JAL     GEN_CACTUS	
+                ; Add generated value to end of vector
+                MVI     R1, VECTOR	
+                ADD     R1, R1, R2	
+                DEC     R1			
+                STOR    M[R1], R3	
+                ; Restore context
+                LOAD 	R7, M[R6]	 
+                INC     R6          
+                LOAD 	R5, M[R6]   
+                INC 	R6              
+				LOAD 	R4, M[R6]	 
+                INC     R6          
+                JMP     R7
+
+PRINT_CACTUS:   ; Save context
+                DEC     R6
+                STOR    M[R6], R4
+                DEC     R6
+                STOR    M[R6], R5
+
+                ; Place the cursor on the correct position
+                MVI     R1, TERM_CURSOR
+                MVI     R4, 1900h
+                STOR    M[R1], R4
+                MVI     R1, VECTOR
+                MVI     R4, TERM_WRITE
+                ; Loop over the 4 lines
+                MVI     R4, MAX_HEIGHT
+                INC     R4
+.BigLoop:       DEC     R4
+                CMP     R4, R0
+                BR.Z    .Return2    
+                MVI     R1, VECTOR
+                MVI     R3, LEN
+
+                ; Loop over the 80 columns
+.Loop:          CMP     R3, R0
+                BR.Z    .BigLoop
+                DEC     R3
+                LOAD    R2, M[R1]
+                INC     R1
+                DEC     R6
+                STOR    M[R6], R4
+                ; Check cactus' height
+                CMP     R4, R2
+                BR.Z    .Write
+                BR.N    .Write
+                
+                ;Print nothing
+.Blank:         MVI     R4, TERM_WRITE
+                MVI     R5, ' '
+                STOR    M[R4], R5
+                LOAD    R4, M[R6]
+                INC     R6
+                BR      .Loop
+                ; Print cactus
+.Write:         MVI     R4, TERM_WRITE
+                MVI     R5, '╬'
+                STOR    M[R4], R5
+                LOAD    R4, M[R6]
+                INC     R6
+                BR      .Loop
+.Return2:       ; Restore context
+                LOAD    R5, M[R6]
+                INC     R6
+                LOAD    R4, M[R6]
+                INC     R6
+                JMP     R7
+                
+PRINT_DINO:     ; Save context
+                DEC     R6
+                STOR    M[R6], R5
+                DEC     R6
+                STOR    M[R6], R4
+                ; Move required constants to registers
+                MVI     R1, TERM_WRITE
+                MVI     R2, TERM_CURSOR
+                MVI     R5, DINO_HEIGHT
+                ; Check if DINO_HEIGHT is != 0
+                LOAD    R5, M[R5]
+                CMP     R5, R0
+                BR.NZ   .Jump
+                ; Draw dino's feet at height 0
+                MVI     R5, 1C04h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .Skip
+.Jump:          ; Check DINO_HEIGHT
+                MVI     R3, 1
+                CMP     R5, R3
+                BR.Z    .Height1
+                INC     R3
+                CMP     R5, R3
+                BR.Z    .Height2
+                INC     R3
+                CMP     R5, R3
+                BR.Z    .Height3
+                INC     R3
+                CMP     R5, R3
+                BR.Z    .Height4
+                INC     R3
+                CMP     R5, R3
+                BR.Z    .Height5
+                ; Draw dino's feet at the appropriate height, depending on DINO_HEIGHT
+.Height1:       MVI     R5, 1B04h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .Skip
+.Height2:       MVI     R5, 1A04h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .Skip
+.Height3:       MVI     R5, 1904h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .Skip
+.Height4:       MVI     R5, 1804h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+                BR      .Skip
+.Height5:       MVI     R5, 1704h
+                STOR    M[R2], R5
+                MVI     R3, '┴'
+                STOR    M[R1], R3
+.Skip:          ; Draw dino's arms and head above its feet
+                MVI     R3, 100h
+                SUB     R5, R5, R3
+                STOR    M[R2], R5
+                MVI     R4, '╞'
+                STOR    M[R1], R4
+                SUB     R5, R5, R3
+                STOR    M[R2], R5
+                MVI     R4, '○'
+                STOR    M[R1], R4
+                SUB     R5, R5, R3
+                STOR    M[R2], R5
+                ; Clear space above dino's head 
+                MVI     R4, ' '
+                STOR    M[R1], R4
+                ; Restore context
+                LOAD    R4, M[R6]
+                INC     R6
+                LOAD    R5, M[R6]
+                INC     R6
+                JMP R7
+
+COLISION:       MVI     R1, VECTOR
+                MVI     R2, 4
+                ADD     R1, R1, R2
+                LOAD    R2, M[R1]
+                DEC     R2
+                MVI     R1, DINO_HEIGHT
+                LOAD    R1, M[R1]
+                ; Check if DINO_HEIGHT is bigger than the cactus in his position
+                CMP     R1, R2
+                BR.NP   .Game_over
+                JMP     R7
+.Game_over:     ; Clear terminal
+                MVI     R1, TERM_CURSOR
+                MVI     R2, FFFFh
+                STOR    M[R1], R2
+                ; Write 'Game Over on terminal'
+                MVI     R3, GAME_OVER
+                MVI     R2, 1322h
+                STOR    M[R1], R2
+                MVI     R1, TERM_WRITE
+.Loop:          INC     R3
+                LOAD    R2, M[R3]
+                STOR    M[R1], R2
+                CMP     R2, R0
+                BR.NZ   .Loop
+                ; Reset score holders
+                MVI     R1, TIME0
+                MVI     R2, 0
+                STOR    M[R1], R2
+                MVI     R1, TIME1
+                STOR    M[R1], R2
+                MVI     R1, TIME2
+                STOR    M[R1], R2
+                MVI     R1, TIME3
+                STOR    M[R1], R2
+                MVI     R1, TIME4
+                STOR    M[R1], R2
+                MVI     R1, TIME5
+                STOR    M[R1], R2
+                ; Reset START variable
+                MVI     R1, START
+                MVI     R2, 0
+                STOR    M[R1], R2
+                ; Stop timer and clear timer ticks
+                MVI     R1,TIMER_TICK
+                STOR    M[R1],R0          
+                MVI     R1,TIMER_CONTROL
+                MVI     R2,TIMER_SETSTOP
+                STOR    M[R1],R2
+                ; Reset VECTOR
+                MVI     R1, VECTOR
+                MOV     R2, R0
+                MVI     R3, 80
+.Loop2:         STOR    M[R1], R2
+                INC     R1
+                DEC     R3
+                CMP     R3, R0
+                BR.NZ   .Loop2 
+                ; Reset DINO_HEIGHT and JUMPING
+                MVI     R1, DINO_HEIGHT
+                MVI     R2, 0 
+                STOR    M[R1], R2
+                MVI     R1, JUMPING
+                STOR    M[R1], R2
+                JMP     MAIN
+
 JUMP:           ; Check if dino is going up or down
                 MVI     R2, JUMPING
                 LOAD    R2, M[R2]
                 CMP     R2, R0
                 BR.N    .Down  
                 ; Increase DINO_HEIGHT each frame until it reaches 5 
-                MVI     R3, 5
+                MVI     R3, MAX_HEIGHT
                 MVI     R1, DINO_HEIGHT
                 LOAD    R2, M[R1]
                 INC     R2
                 STOR    M[R1], R2
                 CMP     R3, R2
-                BR.Z    .Down
+                BR.N    .Down    
                 JMP     R7
 .Down:          ; Decrease DINO_HEIGHT each frame until it reaches 0
                 MVI     R2, JUMPING
@@ -295,43 +528,6 @@ UPDATE_DISP:    DEC     R6
                 INC     R2
                 STOR    M[R1], R2
                 JMP     R7
-
-UPDATE_GAME:    ; Save context
-                DEC 	R6
-				STOR 	M[R6], R4	
-				DEC		R6
-				STOR    M[R6], R5	
-                DEC		R6
-				STOR    M[R6], R7
-                ; Move parameters to registers
-                MVI     R1, VECTOR
-                MVI     R2, LEN	
-                MOV     R5, R2		 
-                DEC     R5			
-.Loop:          ; Shift all values in vector to the left one by one
-                INC     R1			 
-                LOAD    R4, M[R1]	
-                DEC     R1			
-                STOR    M[R1], R4	
-                INC     R1			
-                DEC     R5			
-                CMP     R5, R0		
-                BR.NZ   .Loop		
-                ; Generate cactus/empty space
-                JAL     GEN_CACTUS	
-                ; Add generated value to end of vector
-                MVI     R1, VECTOR	
-                ADD     R1, R1, R2	
-                DEC     R1			
-                STOR    M[R1], R3	
-                ; Restore context
-                LOAD 	R7, M[R6]	 
-                INC     R6          
-                LOAD 	R5, M[R6]   
-                INC 	R6              
-				LOAD 	R4, M[R6]	 
-                INC     R6          
-                JMP     R7
                         
 GEN_CACTUS:     ; Save context
                 DEC 	R6			
@@ -339,7 +535,7 @@ GEN_CACTUS:     ; Save context
 				DEC		R6			
                 STOR    M[R6], R5   
                 ; Move parameters to registers
-				MVI     R1, MAX_ALT
+				MVI     R1, MAX_HEIGHT
                 MVI     R4, SEED
                 LOAD    R4, M[R4]
                 MVI     R5, 1
@@ -369,207 +565,7 @@ GEN_CACTUS:     ; Save context
                 INC 	R6              
                 LOAD 	R4, M[R6]      
                 INC     R6          
-                JMP     R7
-
-PRINT_CACTUS:   ; Save context
-                DEC     R6
-                STOR    M[R6], R4
-                DEC     R6
-                STOR    M[R6], R5
-
-                ; Place the cursor on the correct position
-                MVI     R1, TERM_CURSOR
-                MVI     R4, 1900h
-                STOR    M[R1], R4
-
-                MVI     R1, VECTOR
-                MVI     R4, TERM_WRITE
-
-
-                MVI     R4, 5
-
-                ; Loop over the 4 lines
-.BigLoop:       DEC     R4
-                CMP     R4, R0
-                BR.Z    .Return2
-                MVI     R1, VECTOR
-                MVI     R3, LEN
-
-                ; Loop over the 80 columns
-.Loop:          CMP     R3, R0
-                BR.Z    .BigLoop
-                DEC     R3
-                LOAD    R2, M[R1]
-                INC     R1
-                DEC     R6
-                STOR    M[R6], R4
-                ; Check cactus' height
-                CMP     R4, R2
-                BR.Z    .Write
-                BR.N    .Write
-                
-                ;Print nothing
-.Blank:         MVI     R4, TERM_WRITE
-                MVI     R5, ' '
-                STOR    M[R4], R5
-                LOAD    R4, M[R6]
-                INC     R6
-                BR      .Loop
-                ; Print cactus
-.Write:         MVI     R4, TERM_WRITE
-                MVI     R5, '╬'
-                STOR    M[R4], R5
-                LOAD    R4, M[R6]
-                INC     R6
-                BR      .Loop
-.Return2:       ; Restore context
-                LOAD    R5, M[R6]
-                INC     R6
-                LOAD    R4, M[R6]
-                INC     R6
-                JMP     R7
-                
-PRINT_DINO:     ; Save context
-                DEC     R6
-                STOR    M[R6], R5
-                DEC     R6
-                STOR    M[R6], R4
-                ; Move requires constants to registers
-                MVI     R1, TERM_WRITE
-                MVI     R2, TERM_CURSOR
-                MVI     R5, DINO_HEIGHT
-                ; Check if DINO_HEIGHT is != 0
-                LOAD    R5, M[R5]
-                CMP     R5, R0
-                BR.NZ   .Jump
-                ; Draw dino's feet at height 0
-                MVI     R5, 1C04h
-                STOR    M[R2], R5
-                MVI     R3, '┴'
-                STOR    M[R1], R3
-                BR      .Skip
-.Jump:          ; Check DINO_HEIGHT
-                MVI     R3, 1
-                CMP     R5, R3
-                BR.Z    .Height1
-                INC     R3
-                CMP     R5, R3
-                BR.Z    .Height2
-                INC     R3
-                CMP     R5, R3
-                BR.Z    .Height3
-                INC     R3
-                CMP     R5, R3
-                BR.Z    .Height4
-                INC     R3
-                CMP     R5, R3
-                BR.Z    .Height5
-                ; Draw dino's feet at the appropriate height, depending on DINO_HEIGHT
-.Height1:       MVI     R5, 1B04h
-                STOR    M[R2], R5
-                MVI     R3, '┴'
-                STOR    M[R1], R3
-                BR      .Skip
-.Height2:       MVI     R5, 1A04h
-                STOR    M[R2], R5
-                MVI     R3, '┴'
-                STOR    M[R1], R3
-                BR      .Skip
-.Height3:       MVI     R5, 1904h
-                STOR    M[R2], R5
-                MVI     R3, '┴'
-                STOR    M[R1], R3
-                BR      .Skip
-.Height4:       MVI     R5, 1804h
-                STOR    M[R2], R5
-                MVI     R3, '┴'
-                STOR    M[R1], R3
-                BR      .Skip
-.Height5:       MVI     R5, 1704h
-                STOR    M[R2], R5
-                MVI     R3, '┴'
-                STOR    M[R1], R3
-.Skip:          ; Draw dino's arms and head above its feet
-                MVI     R3, 100h
-                SUB     R5, R5, R3
-                STOR    M[R2], R5
-                MVI     R4, '╞'
-                STOR    M[R1], R4
-                SUB     R5, R5, R3
-                STOR    M[R2], R5
-                MVI     R4, '○'
-                STOR    M[R1], R4
-                SUB     R5, R5, R3
-                STOR    M[R2], R5
-                ; Clear space above dino's head 
-                MVI     R4, ' '
-                STOR    M[R1], R4
-                ; Restore context
-                LOAD    R4, M[R6]
-                INC     R6
-                LOAD    R5, M[R6]
-                INC     R6
-                JMP R7
-                
-COLISION:       MVI     R1, VECTOR
-                MVI     R2, 4
-                ADD     R1, R1, R2
-                LOAD    R2, M[R1]
-                DEC     R2
-                MVI     R1, DINO_HEIGHT
-                LOAD    R1, M[R1]
-                ; Check if DINO_HEIGHT is bigger than the cactus in his position
-                CMP     R1, R2
-                BR.NP   .Game_over
-                JMP     R7
-.Game_over:     ; Clear terminal
-                MVI     R1, TERM_CURSOR
-                MVI     R2, FFFFh
-                STOR    M[R1], R2
-                ; Write 'Game Over on terminal'
-                MVI     R3, GAME_OVER
-                MVI     R2, 1322h
-                STOR    M[R1], R2
-                MVI     R1, TERM_WRITE
-.Loop:          INC     R3
-                LOAD    R2, M[R3]
-                STOR    M[R1], R2
-                CMP     R2, R0
-                BR.NZ   .Loop
-                ; Reset score holders
-                MVI     R1, TIME0
-                MVI     R2, 0
-                STOR    M[R1], R2
-                MVI     R1, TIME1
-                STOR    M[R1], R2
-                MVI     R1, TIME2
-                STOR    M[R1], R2
-                MVI     R1, TIME3
-                STOR    M[R1], R2
-                MVI     R1, TIME4
-                STOR    M[R1], R2
-                MVI     R1, TIME5
-                STOR    M[R1], R2
-                ; Reset START variable
-                MVI     R1, START
-                MVI     R2, 0
-                STOR    M[R1], R2
-                ; Stop timer and clear timer ticks
-                MVI     R1,TIMER_TICK
-                STOR    M[R1],R0          
-                MVI     R1,TIMER_CONTROL
-                MVI     R2,TIMER_SETSTOP
-                STOR    M[R1],R2
-                ; Reset VECTOR
-                MVI     R1, VECTOR
-                MOV     R2, R0
-                MVI     R3, 80
-.Loop2:         STOR    M[R1], R2
-                INC     R1
-                DEC     R3
-                CMP     R3, R0
-                BR.NZ   .Loop2 
-                JMP     MAIN
+                JMP     R7               
                 
 ;-------------- Interrupts -----------------------------------------------------
 
