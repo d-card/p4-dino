@@ -186,7 +186,7 @@ UPDATE_DISP:    DEC     R6
                 ; SHOW TIME ON DISP7_D0
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   .REGULAR0
+                JAL.P   .Regular0
                 MVI     R1, TIME0
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D0
@@ -196,7 +196,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   .REGULAR1
+                JAL.P   .Regular1
                 MVI     R1, TIME1
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D1
@@ -206,7 +206,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   .REGULAR2
+                JAL.P   .Regular2
                 MVI     R1, TIME2
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D2
@@ -216,7 +216,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   .REGULAR3
+                JAL.P   .Regular3
                 MVI     R1, TIME3
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D3
@@ -226,7 +226,7 @@ UPDATE_DISP:    DEC     R6
                 LOAD    R2, M[R1]
                 MVI     R1,9
                 CMP     R2,R1
-                JAL.P   .REGULAR4
+                JAL.P   .Regular4
                 MVI     R1, TIME4
                 LOAD    R2, M[R1]
                 MVI     R1,DISP7_D4
@@ -246,7 +246,7 @@ UPDATE_DISP:    DEC     R6
                 INC     R6
                 JMP     R7
                 
-.REGULAR0:      ; Make the first display show 0 and increment the second
+.Regular0:      ; Make the first display show 0 and increment the second
                 MVI     R1, TIME0
                 MVI     R2, 0
                 STOR    M[R1], R2
@@ -256,7 +256,7 @@ UPDATE_DISP:    DEC     R6
                 STOR    M[R1], R2
                 JMP     R7
                 
-.REGULAR1:      ; Make the second display show 0 and increment the third
+.Regular1:      ; Make the second display show 0 and increment the third
                 MVI     R1, TIME1
                 MVI     R2, 0
                 STOR    M[R1], R2
@@ -266,7 +266,7 @@ UPDATE_DISP:    DEC     R6
                 STOR    M[R1], R2
                 JMP     R7
                 
-.REGULAR2:      ; Make the third display show 0 and increment the fourth
+.Regular2:      ; Make the third display show 0 and increment the fourth
                 MVI     R1, TIME2
                 MVI     R2, 0
                 STOR    M[R1], R2
@@ -276,7 +276,7 @@ UPDATE_DISP:    DEC     R6
                 STOR    M[R1], R2
                 JMP     R7
                 
-.REGULAR3:      ; Make the fourth display show 0 and increment the fifth
+.Regular3:      ; Make the fourth display show 0 and increment the fifth
                 MVI     R1, TIME3
                 MVI     R2, 0
                 STOR    M[R1], R2
@@ -286,7 +286,7 @@ UPDATE_DISP:    DEC     R6
                 STOR    M[R1], R2
                 JMP     R7
                 
-.REGULAR4:      ; Make the fifth display show 0 and increment the sixth
+.Regular4:      ; Make the fifth display show 0 and increment the sixth
                 MVI     R1, TIME4
                 MVI     R2, 0
                 STOR    M[R1], R2
@@ -373,12 +373,6 @@ GEN_CACTUS:     ; Save context
 
 PRINT_CACTUS:   ; Save context
                 DEC     R6
-                STOR    M[R6], R1
-                DEC     R6
-                STOR    M[R6], R2
-                DEC     R6
-                STOR    M[R6], R3
-                DEC     R6
                 STOR    M[R6], R4
                 DEC     R6
                 STOR    M[R6], R5
@@ -395,15 +389,15 @@ PRINT_CACTUS:   ; Save context
                 MVI     R4, 5
 
                 ; Loop over the 4 lines
-.BIGLOOP:       DEC     R4
+.BigLoop:       DEC     R4
                 CMP     R4, R0
-                BR.Z    .RETURN2
+                BR.Z    .Return2
                 MVI     R1, VECTOR
                 MVI     R3, LEN
 
                 ; Loop over the 80 columns
-.LOOP:          CMP     R3, R0
-                BR.Z    .BIGLOOP
+.Loop:          CMP     R3, R0
+                BR.Z    .BigLoop
                 DEC     R3
                 LOAD    R2, M[R1]
                 INC     R1
@@ -411,33 +405,27 @@ PRINT_CACTUS:   ; Save context
                 STOR    M[R6], R4
                 ; Check cactus' height
                 CMP     R4, R2
-                BR.Z    .ESCREVER
-                BR.N    .ESCREVER
+                BR.Z    .Write
+                BR.N    .Write
                 
                 ;Print nothing
-.NADA:          MVI     R4, TERM_WRITE
+.Blank:         MVI     R4, TERM_WRITE
                 MVI     R5, ' '
                 STOR    M[R4], R5
                 LOAD    R4, M[R6]
                 INC     R6
-                BR      .LOOP
+                BR      .Loop
                 ; Print cactus
-.ESCREVER:      MVI     R4, TERM_WRITE
+.Write:         MVI     R4, TERM_WRITE
                 MVI     R5, '╬'
                 STOR    M[R4], R5
                 LOAD    R4, M[R6]
                 INC     R6
-                BR      .LOOP
-.RETURN2:       ; Restore context
+                BR      .Loop
+.Return2:       ; Restore context
                 LOAD    R5, M[R6]
                 INC     R6
                 LOAD    R4, M[R6]
-                INC     R6
-                LOAD    R3, M[R6]
-                INC     R6
-                LOAD    R2, M[R6]
-                INC     R6
-                LOAD    R1, M[R6]
                 INC     R6
                 JMP     R7
                 
