@@ -530,7 +530,7 @@ COLISION:       MVI     R1, VECTOR
                 DEC     R2
                 MVI     R1, DINO_HEIGHT
                 LOAD    R1, M[R1]
-                ; Check if DINO_HEIGHT is bigger than the cactus value in its position
+                ; Check if DINO_HEIGHT is bigger than the cactus in his position
                 CMP     R1, R2
                 BR.NP   .Game_over
                 JMP     R7
