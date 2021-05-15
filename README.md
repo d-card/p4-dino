@@ -1,1 +1,7 @@
-This project was made for my IAC class in IST together with @PeraltaBoi. The objective was recreating the chrome dino game on the assembly language of the educational processor P4. Code is final.
+# Assembly Dino Game
+
+Project 1 for 2020/2021 Introduction to Computer Architecture @ IST. Co-authored by @PeraltaBoi
+
+[Project Statement Part 1](IAC-2020-Projeto-Parte1.pdf)
+
+[Project Statement Part 2](IAC-2020-Projeto-Parte2.pdf)
